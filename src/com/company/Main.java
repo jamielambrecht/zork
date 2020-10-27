@@ -1,11 +1,14 @@
-// package com.company;
+package com.company;
 import java.util.ArrayList;
+import java.io.*;
+import java.util.Scanner;
 
 public class Main {
     // Change name if you wish
-    public static enum SIDE {NORTH, SOUTH, EAST, WEST};
+    public enum SIDE {NORTH, SOUTH, EAST, WEST}
 
     public static void main(String[] args) {
+        CommandUI playerUI = CommandUI.createUI();
 
         // Todo : instantiate rooms,
 		/* Plan of Action
@@ -17,7 +20,7 @@ public class Main {
 			 								OR YOU CAN DO
 			 - Or you can do: Player player = new Player();
 			 - player.setLocation(westOfHouse);
-		 - Create all inital objects in each room
+		 - Create all initial objects in each room
 		*/
         SIDE temp = SIDE.NORTH;
         int index = temp.ordinal(); // This is the thing from C++!  Hooray!
@@ -26,9 +29,147 @@ public class Main {
         int myNum = 5;
         Room westOfHouse = new Room();
         boolean isOpen = true;
+
+        playerUI.input();
+
     }
 } // This is the bottom of Main class
 
+class CommandUI {
+    private static CommandUI instance;
+    private Scanner in;
+
+    private ArrayList<Command> commandsList;
+    private Command noCommand = new NoCommand();
+
+    private CommandUI() {
+        this.in = new Scanner(System.in);
+
+        commandsList = new ArrayList<Command>();
+        Command noCommand = new NoCommand();
+        commandsList.add(new LookCommand());
+        commandsList.add(new GoCommand());
+        commandsList.add(new OpenCommand());
+        commandsList.add(new InventoryCommand());
+        commandsList.add(new TakeCommand());
+        commandsList.add(new GetCommand());
+        commandsList.add(new ReadCommand());
+        commandsList.add(new ExamineCommand());
+        commandsList.add(new ThrowCommand());
+        commandsList.add(new DropCommand());
+        commandsList.add(new AttackCommand());
+        commandsList.add(new DrinkCommand());
+    }
+
+    public void input()  {
+        System.out.print(">: ");
+        while (in.hasNext()) {
+            String word = in.next();
+            // Check for valid input
+            System.out.println(word);
+        }
+    }
+
+    public Command checkForCommand(String word) {
+        for (Command cmd : commandsList) {
+            if (word == cmd.toString()) {
+                return cmd;
+            }
+        }
+        return noCommand;
+    }
+
+    public static CommandUI createUI() {
+        if (instance == null) {
+            instance = new CommandUI();
+        }
+        return instance;
+    }
+}
+
+interface Command {
+    void execute();
+    void setTarget(Entity target);
+}
+
+class LookCommand implements Command {
+    Entity target;
+
+    public void execute() {};
+    public void setTarget(Entity target) {};
+}
+class GoCommand implements Command {
+    Entity target;
+
+    public void execute() {};
+    public void setTarget(Entity target) {};
+}
+class OpenCommand implements Command {
+    Entity target;
+
+    public void execute() {};
+    public void setTarget(Entity target) {};
+}
+class InventoryCommand implements Command {
+    Entity target;
+
+    public void execute() {};
+    public void setTarget(Entity target) {};
+}
+class TakeCommand implements Command {
+    Entity target;
+
+    public void execute() {};
+    public void setTarget(Entity target) {};
+}
+class GetCommand implements Command {
+    Entity target;
+
+    public void execute() {};
+    public void setTarget(Entity target) {};
+}
+class ReadCommand implements Command {
+    Entity target;
+
+    public void execute() {};
+    public void setTarget(Entity target) {};
+}
+class ExamineCommand implements Command {
+    Entity target;
+
+    public void execute() {};
+    public void setTarget(Entity target) {};
+}
+class ThrowCommand implements Command {
+    Entity target;
+
+    public void execute() {};
+    public void setTarget(Entity target) {};
+}
+class DropCommand implements Command {
+    Entity target;
+
+    public void execute() {};
+    public void setTarget(Entity target) {};
+}
+class AttackCommand implements Command {
+    Entity target;
+
+    public void execute() {};
+    public void setTarget(Entity target) {};
+}
+class DrinkCommand implements Command {
+    Entity target;
+
+    public void execute() {};
+    public void setTarget(Entity target) {};
+}
+class NoCommand implements Command {
+    Entity target;
+
+    public void execute() {};
+    public void setTarget(Entity target) {};
+}
 
 abstract class Entity {
     protected String name;
@@ -84,7 +225,6 @@ interface MapSite {
     void enter();
 }
 
-
 class Room implements MapSite {
     // private SIDE[] side = {"north", "south", "east", "west"}; // Not needed at all
     private MapSite[] sides = new MapSite[6]; // NEWS + UP + DOWN
@@ -96,10 +236,7 @@ class Room implements MapSite {
     //ArrayList<Item> getItems();
     // public String toString() {
     // }
-
-    // public void enter() { // ??????? Waiting
-
-    // }
+    public void enter() {};
 }
 
 class WestOfHouse extends Room {
