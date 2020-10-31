@@ -8,21 +8,18 @@ class PlayerUI {
     private Scanner in;
     String inputString;
     Command currentCommand;
+    ArrayList<Object> targetsList;
     Player player;
 
     private ArrayList<Command> commandsList;
     private Command noCommand = new NoCommand();
-    //private Command noTarget = new NoTarget();
 
     private PlayerUI(Player player) {
         this.player = player;
         this.in = new Scanner(System.in);
         inputString = new String();
-        Command currentCommand = new NoCommand();
-        Object target = new Object();
 
         commandsList = new ArrayList<Command>();
-        Command noCommand = new NoCommand();
         commandsList.add(new LookCommand());
         commandsList.add(new GoCommand());
         commandsList.add(new OpenCommand());
@@ -35,34 +32,38 @@ class PlayerUI {
         commandsList.add(new DropCommand());
         commandsList.add(new AttackCommand());
         commandsList.add(new DrinkCommand());
+        commandsList.add(new QuitCommand());
     }
 
-    public void input()  {
+    public boolean input(Player player)  {
+        targetsList = player.location.getTargets();
+        Object target;
         System.out.print(">");
         inputString = in.nextLine();
         String[] words = inputString.trim().split("\\s+");
         boolean foundCommand = false;
+        boolean quitFlag = false;
+
         for (String s : words) {
             if (!foundCommand) {
               currentCommand = checkForCommand(s);
             } else {
-              //target = checkForTarget(s);
-            }
-
-        }
-        currentCommand.execute(player);
-    }
-
-    /*
-    public Command checkForTarget(String word) {
-        for (Entity en : targetsList) {
-            if (word.equals(en.toString())) {
-                return en;
+              target = checkForTarget(s);
             }
         }
-        return noTarget;
+        return currentCommand.execute(player);
     }
-    */
+
+    
+    public Object checkForTarget(String word) {
+        for (Object target : targetsList) {
+            if (word.equals(target.toString())) {
+                return target;
+            }
+        }
+        return null;
+    }
+    
 
     public Command checkForCommand(String word) {
         for (Command cmd : commandsList) {
@@ -73,9 +74,9 @@ class PlayerUI {
         return noCommand;
     }
 
-    public static PlayerUI createUI() {
+    public static PlayerUI createUI(Player player) {
         if (instance == null) {
-            instance = new PlayerUI();
+            instance = new PlayerUI(player);
         }
         return instance;
     }

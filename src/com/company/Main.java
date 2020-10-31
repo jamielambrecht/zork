@@ -3,29 +3,18 @@ import java.util.ArrayList;
 import java.io.*;
 
 public class Main {
-        public static void main(String[] args) {
-        PlayerUI playerUI = PlayerUI.createUI();
+    public static void main(String[] args) {
+
         ArrayList<Room> world = new ArrayList<Room>();
         world.add(new WestOfHouse());
         Player player = new Player();
-        player.setLocation(world[0]);
-
-        // Todo : instantiate rooms,
-		/* Plan of Action
-		 - Call MazeBuilder or MazeFactory to build your maze
-		 	 - Rooms made :)
-			 - One room is called Room westOfHouse = new Room("West of House" //...)
-		 - Call Player constructor, and put the player in a rooms
-			 - Player player = new Player(15, 5, westOfHouse);
-			 								OR YOU CAN DO
-			 - Or you can do: Player player = new Player();
-			 - player.setLocation(westOfHouse);
-		 - Create all initial objects in each room
-		*/
-
-
-        playerUI.input();
-
+        PlayerUI playerUI = PlayerUI.createUI(player);
+        player.setLocation(world.get(0));
+        boolean quit = false;
+        
+        while(!quit) {
+            quit = playerUI.input(player);
+        }
     }
 }
 
@@ -39,36 +28,3 @@ abstract class Entity {
     public int hitPoints() { return hitPoints; }
     // public Room getLocation() { return location; }
 }
-
-abstract class Room {
-    // private ArrayList<Item> items;
-    String name;
-    String description;
-    ArrayList<String> roomView;
-    public Room() {};
-
-    //ArrayList<Item> getItems();
-    
-}
-
-class WestOfHouse extends Room {
-    public WestOfHouse() {
-        name = "West of House";
-        description = "This is an open field west of a white house, with a boarded front door." 
-        + "There is a small mailbox here."
-        + "A rubber mat saying 'Welcome to Zork!' lies by the door.";
-        roomView = new ArrayList<String>();
-        roomView.add(name);
-        roomView.add(description);
-
-
-    }
-
-    public void look() { 
-      for (String s : roomView) {
-        System.out.println(s);
-      }
-    };
-}
-
-

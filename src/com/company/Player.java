@@ -1,14 +1,8 @@
 package com.company;
 
 public class Player extends Entity {
-    // int playerHP;
-    // public void Player() {
-    //     this(15, null);
-    // }
-    // public void Player(int playerHP, Room location) {
-    //     this.playerHP = playerHP;
-    //     this.location = location;
-    // }
+	Room location;
+
     public Player() { this(15, 5, null); }
 
     public Player(int hitPoints, int damageDealt, Room location) {

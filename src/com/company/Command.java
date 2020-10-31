@@ -1,88 +1,129 @@
 package com.company;
+import java.util.Scanner;
 
 interface Command {
-    void execute(Player player);
+    boolean execute(Player player);
 }
 
 class LookCommand implements Command {
 
     public LookCommand() {}
-    public void execute(Player player) {
+    public boolean execute(Player player) {
         player.location.look();
+        return false;
     }
     public String toString() {
         return "look";
     }
 }
 class GoCommand implements Command {
-    Entity target;
+    Object target;
 
-    public void execute(Player player) {};
-    public void setTarget(Entity target) {};
+    public boolean execute(Player player) {
+        return false;
+    };
+    public void setTarget(Object target) {};
 }
 class OpenCommand implements Command {
-    Entity target;
+    Object target;
 
-    public void execute(Player player) {};
-    public void setTarget(Entity target) {};
+    public boolean execute(Player player) {
+        return false;
+    };
+    public void setTarget(Object target) {};
 }
 class InventoryCommand implements Command {
-    Entity target;
+    Object target;
 
-    public void execute(Player player) {};
-    public void setTarget(Entity target) {};
+    public boolean execute(Player player) {
+        return false;
+    };
+    public void setTarget(Object target) {};
 }
 class TakeCommand implements Command {
-    Entity target;
+    Object target;
 
-    public void execute(Player player) {};
-    public void setTarget(Entity target) {};
+    public boolean execute(Player player) {
+        return false;
+    };
+    public void setTarget(Object target) {};
 }
 class GetCommand implements Command {
-    Entity target;
+    Object target;
 
-    public void execute(Player player) {};
-    public void setTarget(Entity target) {};
+    public boolean execute(Player player) {
+        return false;
+    };
+    public void setTarget(Object target) {};
 }
 class ReadCommand implements Command {
-    Entity target;
+    Object target;
 
-    public void execute(Player player) {};
-    public void setTarget(Entity target) {};
+    public boolean execute(Player player) {
+        return false;
+    };
+    public void setTarget(Object target) {};
 }
 class ExamineCommand implements Command {
-    Entity target;
+    Object target;
 
-    public void execute(Player player) {};
-    public void setTarget(Entity target) {};
+    public boolean execute(Player player) {
+        return false;
+    };
+    public void setTarget(Object target) {};
 }
 class ThrowCommand implements Command {
-    Entity target;
+    Object target;
 
-    public void execute(Player player) {};
-    public void setTarget(Entity target) {};
+    public boolean execute(Player player) {
+        return false;
+    };
+    public void setTarget(Object target) {};
 }
 class DropCommand implements Command {
-    Entity target;
+    Object target;
 
-    public void execute(Player player) {};
-    public void setTarget(Entity target) {};
+    public boolean execute(Player player) {
+        return false;
+    };
+    public void setTarget(Object target) {};
 }
 class AttackCommand implements Command {
-    Entity target;
+    Object target;
 
-    public void execute(Player player) {};
-    public void setTarget(Entity target) {};
+    public boolean execute(Player player) {
+        return false;
+    };
+    public void setTarget(Object target) {};
 }
 class DrinkCommand implements Command {
-    Entity target;
+    Object target;
 
-    public void execute(Player player) {};
-    public void setTarget(Entity target) {};
+    public boolean execute(Player player) {
+        return false;
+    };
+    public void setTarget(Object target) {};
+}
+class QuitCommand implements Command {
+    Object target;
+
+    public boolean execute(Player player) {
+        System.out.println("Are you sure that you want to quit playing? (y/N)");
+        Scanner quitInput = new Scanner(System.in);
+        if(quitInput.nextLine().toLowerCase().equals("y")) {
+            return true;
+        }
+        return false;
+    };
+    public void setTarget(Object target) {};
+
+    public String toString() { return "quit"; }
 }
 class NoCommand implements Command {
-    Entity target;
+    Object target;
 
-    public void execute(Player player) {};
-    public void setTarget(Entity target) {};
+    public boolean execute(Player player) {
+        return false;
+    };
+    public void setTarget(Object target) {};
 }
