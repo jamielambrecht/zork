@@ -1,4 +1,5 @@
 package com.company;
+import java.util.ArrayList;
 import java.io.*;
 
 public class Main {
@@ -51,7 +52,10 @@ abstract class Room {
 
 class WestOfHouse extends Room {
     public WestOfHouse() {
-        
+        name = "West of House";
+        description = ""
+        ArrayList<String> roomView = new ArrayList<String>();
+
     }
 }
 
