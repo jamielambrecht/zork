@@ -5,6 +5,10 @@ import java.io.*;
 public class Main {
         public static void main(String[] args) {
         PlayerUI playerUI = PlayerUI.createUI();
+        ArrayList<Room> world = new ArrayList<Room>();
+        world.add(new WestOfHouse());
+        Player player = new Player();
+        player.setLocation(world[0]);
 
         // Todo : instantiate rooms,
 		/* Plan of Action
@@ -36,14 +40,11 @@ abstract class Entity {
     // public Room getLocation() { return location; }
 }
 
-interface RoomFactory {
-
-}
-
 abstract class Room {
     // private ArrayList<Item> items;
     String name;
     String description;
+    ArrayList<String> roomView;
     public Room() {};
 
     //ArrayList<Item> getItems();
@@ -53,10 +54,21 @@ abstract class Room {
 class WestOfHouse extends Room {
     public WestOfHouse() {
         name = "West of House";
-        description = ""
-        ArrayList<String> roomView = new ArrayList<String>();
+        description = "This is an open field west of a white house, with a boarded front door." 
+        + "There is a small mailbox here."
+        + "A rubber mat saying 'Welcome to Zork!' lies by the door.";
+        roomView = new ArrayList<String>();
+        roomView.add(name);
+        roomView.add(description);
+
 
     }
+
+    public void look() { 
+      for (String s : roomView) {
+        System.out.println(s);
+      }
+    };
 }
 
 

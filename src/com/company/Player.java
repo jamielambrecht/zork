@@ -35,10 +35,9 @@ public class Player extends Entity {
     }
     */
     // Room location = new Room();
-    void look() { }
-    void take() { }
-
-    
+    void setLocation(Room room) {
+      this.location = room;
+    }
 }
 
 

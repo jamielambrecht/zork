@@ -8,14 +8,18 @@ class PlayerUI {
     private Scanner in;
     String inputString;
     Command currentCommand;
+    Player player;
 
     private ArrayList<Command> commandsList;
     private Command noCommand = new NoCommand();
+    //private Command noTarget = new NoTarget();
 
-    private PlayerUI() {
+    private PlayerUI(Player player) {
+        this.player = player;
         this.in = new Scanner(System.in);
         inputString = new String();
         Command currentCommand = new NoCommand();
+        Object target = new Object();
 
         commandsList = new ArrayList<Command>();
         Command noCommand = new NoCommand();
@@ -39,12 +43,27 @@ class PlayerUI {
         String[] words = inputString.trim().split("\\s+");
         boolean foundCommand = false;
         for (String s : words) {
-            currentCommand = checkForCommand(s);
+            if (!foundCommand) {
+              currentCommand = checkForCommand(s);
+            } else {
+              //target = checkForTarget(s);
+            }
+
         }
-        currentCommand.execute();
+        currentCommand.execute(player);
     }
 
-    
+    /*
+    public Command checkForTarget(String word) {
+        for (Entity en : targetsList) {
+            if (word.equals(en.toString())) {
+                return en;
+            }
+        }
+        return noTarget;
+    }
+    */
+
     public Command checkForCommand(String word) {
         for (Command cmd : commandsList) {
             if (word.equals(cmd.toString())) {
