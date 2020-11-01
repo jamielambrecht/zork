@@ -50,9 +50,12 @@ abstract class Room {
         private String string = new String();
         private String destinationName = new String();
         private Room destination;
-        public Door(String string, String destinationName) {
+        private boolean locked;
+        private String lockedMsg = new String();
+        public Door(String string, String destinationName, boolean locked) {
             this.string = string;
             this.destinationName = destinationName;
+            this.locked = locked;
         }
         public Room enter(World world) {
             for (Room room : world.getRooms()) {
@@ -62,6 +65,16 @@ abstract class Room {
             }
             return destination;
         }
+        public boolean isLocked() {
+            return locked;
+        }
+        public void setLockedMsg(String lockedMsg) {
+            this.lockedMsg = lockedMsg;
+        }
+        public String getLockedMsg() {
+            return lockedMsg;
+        }
+
         public String toString() { return string; }
     }
 }
@@ -77,7 +90,10 @@ class WestOfHouse extends Room {
         roomView.add(name);
         this.roomView.add(description);
 
-        this.doors.add(new Door("north", "North of House"));
+        this.doors.add(new Door("north", "North of House", false));
+        this.doors.add(new Door("east", " ", true));
+        this.doors.get(1).setLockedMsg("The door is boarded and you can't remove the boards.");
+
     }
 }
 
@@ -91,6 +107,6 @@ class NorthOfHouse extends Room {
         this.roomView.add(name);
         this.roomView.add(description);
 
-        this.doors.add(new Door("west", "West of House"));
+        this.doors.add(new Door("west", "West of House", false));
     }
 }

@@ -13,6 +13,7 @@ public class Player {
         this.damageDealt = damageDealt;
         this.world = world;
         this.location = world.getRooms().get(0);
+        this.location.look();
     }
 
 		/*
@@ -35,7 +36,7 @@ public class Player {
     // Room location = new Room();
     public Room getLocation() { return this.location; }
     public void setLocation(Room room) {
-      this.location = room;
+        this.location = room;
     }
 }
 

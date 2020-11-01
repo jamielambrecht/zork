@@ -26,7 +26,12 @@ class GoCommand extends Command {
     public boolean execute(String target) {
         for (Room.Door door : player.getLocation().doors) {
             if (target.equals(door.toString())) {
-                player.setLocation(door.enter(player.world));
+                if (!door.isLocked()) {
+                    player.setLocation(door.enter(player.world));
+                    player.getLocation().look();
+                } else {
+                    System.out.println(door.getLockedMsg());
+                }
             }
         }
         return false;
