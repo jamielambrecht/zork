@@ -7,7 +7,7 @@ class PlayerUI {
     private static PlayerUI instance;
     private Scanner in;
     private String inputString;
-    private Command currentCommand;
+    static private Command currentCommand;
     private ArrayList<String> targetsList = new ArrayList<String>();
     private Player player;
     private String target;
@@ -68,12 +68,12 @@ class PlayerUI {
                 return cmd;
             }
         }
-        return noCommand;
+        return this.noCommand;
     }
     
     public String checkForTarget(String word) {
         for (String target : targetsList) {
-            if (word.equals(target.toString())) {
+            if (word.equals(target)) {
                 return target;
             }
         }
