@@ -1,113 +1,103 @@
 package com.company;
 import java.util.Scanner;
 
-interface Command {
-    boolean execute(Player player);
+import static java.lang.System.exit;
+
+abstract public class Command {
+    protected Player player;
+    public Command(Player player) { this.player = player; };
+    abstract public boolean execute(String target);
 }
 
-class LookCommand implements Command {
+class LookCommand extends Command {
 
-    public LookCommand() {}
-    public boolean execute(Player player) {
-        player.location.look();
+    public LookCommand(Player player) { super(player); }
+    public boolean execute(String target) {
+        this.player.getLocation().look();
         return false;
     }
     public String toString() {
         return "look";
     }
 }
-class GoCommand implements Command {
-    Object target;
+class GoCommand extends Command {
+    public GoCommand(Player player) { super(player); }
 
-    public boolean execute(Player player) {
+    public boolean execute(String target) {
+        for (Room.Door door : player.getLocation().doors) {
+            if (target.equals(door.toString())) {
+                player.setLocation(door.enter(player.world));
+            }
+        }
         return false;
     };
-    public void setTarget(Object target) {};
+    public String toString() { return "go"; };
 }
-class OpenCommand implements Command {
-    Object target;
-
-    public boolean execute(Player player) {
+class OpenCommand extends Command {
+    public OpenCommand(Player player) { super(player); }
+    public boolean execute(String target) {
         return false;
     };
-    public void setTarget(Object target) {};
 }
-class InventoryCommand implements Command {
-    Object target;
-
-    public boolean execute(Player player) {
+class InventoryCommand extends Command {
+    public InventoryCommand(Player player) { super(player); }
+    public boolean execute(String target) {
         return false;
     };
-    public void setTarget(Object target) {};
 }
-class TakeCommand implements Command {
-    Object target;
-
-    public boolean execute(Player player) {
+class TakeCommand extends Command {
+    public TakeCommand(Player player) { super(player); }
+    public boolean execute(String target) {
         return false;
     };
-    public void setTarget(Object target) {};
-}
-class GetCommand implements Command {
-    Object target;
 
-    public boolean execute(Player player) {
+    public String toString() {return "take";};
+}
+class GetCommand extends Command {
+    public GetCommand(Player player) { super(player); }
+    public boolean execute(String target) {
         return false;
     };
-    public void setTarget(Object target) {};
 }
-class ReadCommand implements Command {
-    Object target;
-
-    public boolean execute(Player player) {
+class ReadCommand extends Command {
+    public ReadCommand(Player player) { super(player); }
+    public boolean execute(String target) {
         return false;
     };
-    public void setTarget(Object target) {};
 }
-class ExamineCommand implements Command {
-    Object target;
-
-    public boolean execute(Player player) {
+class ExamineCommand extends Command {
+    public ExamineCommand(Player player) { super(player); }
+    public boolean execute(String target) {
         return false;
     };
-    public void setTarget(Object target) {};
 }
-class ThrowCommand implements Command {
-    Object target;
-
-    public boolean execute(Player player) {
+class ThrowCommand extends Command {
+    public ThrowCommand(Player player) { super(player); }
+    public boolean execute(String target) {
         return false;
     };
-    public void setTarget(Object target) {};
 }
-class DropCommand implements Command {
-    Object target;
-
-    public boolean execute(Player player) {
+class DropCommand extends Command {
+    public DropCommand(Player player) { super(player); }
+    public boolean execute(String target) {
         return false;
     };
-    public void setTarget(Object target) {};
 }
-class AttackCommand implements Command {
-    Object target;
-
-    public boolean execute(Player player) {
+class AttackCommand extends Command {
+    public AttackCommand(Player player) { super(player); }
+    public boolean execute(String target) {
         return false;
     };
-    public void setTarget(Object target) {};
 }
-class DrinkCommand implements Command {
-    Object target;
-
-    public boolean execute(Player player) {
+class DrinkCommand extends Command {
+    public DrinkCommand(Player player) { super(player); }
+    public boolean execute(String target) {
         return false;
     };
-    public void setTarget(Object target) {};
 }
-class QuitCommand implements Command {
-    Object target;
-
-    public boolean execute(Player player) {
+class QuitCommand extends Command {
+    public QuitCommand(Player player) { super(player); }
+    public boolean execute(String target) {
         System.out.println("Are you sure that you want to quit playing? (y/N)");
         Scanner quitInput = new Scanner(System.in);
         if(quitInput.nextLine().toLowerCase().equals("y")) {
@@ -115,15 +105,12 @@ class QuitCommand implements Command {
         }
         return false;
     };
-    public void setTarget(Object target) {};
 
     public String toString() { return "quit"; }
 }
-class NoCommand implements Command {
-    Object target;
-
-    public boolean execute(Player player) {
+class NoCommand extends Command {
+    public NoCommand(Player player) { super(player); }
+    public boolean execute(String target) {
         return false;
     };
-    public void setTarget(Object target) {};
 }

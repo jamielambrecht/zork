@@ -6,38 +6,42 @@ import java.util.Scanner;
 class PlayerUI {
     private static PlayerUI instance;
     private Scanner in;
-    String inputString;
-    Command currentCommand;
-    ArrayList<Object> targetsList;
-    Player player;
+    private String inputString;
+    private Command currentCommand;
+    private ArrayList<String> targetsList = new ArrayList<String>();
+    private Player player;
+    private String target;
 
     private ArrayList<Command> commandsList;
-    private Command noCommand = new NoCommand();
+    private Command noCommand;
 
     private PlayerUI(Player player) {
         this.player = player;
         this.in = new Scanner(System.in);
-        inputString = new String();
+        this.inputString = new String();
+        this.target = new String();
 
         commandsList = new ArrayList<Command>();
-        commandsList.add(new LookCommand());
-        commandsList.add(new GoCommand());
-        commandsList.add(new OpenCommand());
-        commandsList.add(new InventoryCommand());
-        commandsList.add(new TakeCommand());
-        commandsList.add(new GetCommand());
-        commandsList.add(new ReadCommand());
-        commandsList.add(new ExamineCommand());
-        commandsList.add(new ThrowCommand());
-        commandsList.add(new DropCommand());
-        commandsList.add(new AttackCommand());
-        commandsList.add(new DrinkCommand());
-        commandsList.add(new QuitCommand());
+        commandsList.add(new LookCommand(player));
+        commandsList.add(new GoCommand(player));
+        commandsList.add(new OpenCommand(player));
+        commandsList.add(new InventoryCommand(player));
+        commandsList.add(new TakeCommand(player));
+        commandsList.add(new GetCommand(player));
+        commandsList.add(new ReadCommand(player));
+        commandsList.add(new ExamineCommand(player));
+        commandsList.add(new ThrowCommand(player));
+        commandsList.add(new DropCommand(player));
+        commandsList.add(new AttackCommand(player));
+        commandsList.add(new DrinkCommand(player));
+        commandsList.add(new QuitCommand(player));
+
+        this.noCommand = new NoCommand(player);
+        commandsList.add(noCommand);
     }
 
-    public boolean input(Player player)  {
-        targetsList = player.location.getTargets();
-        Object target;
+    public boolean input()  {
+        this.targetsList = this.player.getLocation().getTargets();
         System.out.print(">");
         inputString = in.nextLine();
         String[] words = inputString.trim().split("\\s+");
@@ -47,23 +51,16 @@ class PlayerUI {
         for (String s : words) {
             if (!foundCommand) {
               currentCommand = checkForCommand(s);
+              if (currentCommand != noCommand) {
+                  foundCommand = true;
+              }
             } else {
-              target = checkForTarget(s);
+                target = checkForTarget(s);
             }
         }
-        return currentCommand.execute(player);
+        quitFlag = currentCommand.execute(target);
+        return quitFlag;
     }
-
-    
-    public Object checkForTarget(String word) {
-        for (Object target : targetsList) {
-            if (word.equals(target.toString())) {
-                return target;
-            }
-        }
-        return null;
-    }
-    
 
     public Command checkForCommand(String word) {
         for (Command cmd : commandsList) {
@@ -72,6 +69,15 @@ class PlayerUI {
             }
         }
         return noCommand;
+    }
+    
+    public String checkForTarget(String word) {
+        for (String target : targetsList) {
+            if (word.equals(target.toString())) {
+                return target;
+            }
+        }
+        return null;
     }
 
     public static PlayerUI createUI(Player player) {

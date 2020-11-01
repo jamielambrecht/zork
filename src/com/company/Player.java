@@ -1,14 +1,18 @@
 package com.company;
 
-public class Player extends Entity {
-	Room location;
+public class Player {
+    protected String name;
+    protected int hitPoints;
+    protected int damageDealt;
+	protected Room location;
+	protected World world;
 
-    public Player() { this(15, 5, null); }
 
-    public Player(int hitPoints, int damageDealt, Room location) {
+    public Player(int hitPoints, int damageDealt, World world) {
         this.hitPoints = hitPoints;
         this.damageDealt = damageDealt;
-        this.location = location;
+        this.world = world;
+        this.location = world.getRooms().get(0);
     }
 
 		/*
@@ -29,7 +33,8 @@ public class Player extends Entity {
     }
     */
     // Room location = new Room();
-    void setLocation(Room room) {
+    public Room getLocation() { return this.location; }
+    public void setLocation(Room room) {
       this.location = room;
     }
 }
