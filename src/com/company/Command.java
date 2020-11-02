@@ -31,7 +31,7 @@ class GoCommand extends Command {
             for (Room.Door door : player.getLocation().doors) {
                 for (String s : door.getIdentifiers()) {
                     if (target.equals(s)) {
-                        if (door.isOpen()) {
+                        if (door.isOpen() && !door.isLocked()) {
                             player.setLocation(door.enter(player.world));
                             player.getLocation().look();
                         } else {
@@ -55,14 +55,14 @@ class OpenCommand extends Command {
             for (Room.Door door : player.getLocation().doors) {
                 for (String s : door.getIdentifiers()) {
                     if (target.equals(s)) {
-                        door.open();
+                        door.open(player);
                     }
                 }
             }
             for (Room.StaticObject obj : player.getLocation().staticObjects) {
                 for (String s : obj.getIdentifiers()) {
                     if (target.equals(s)) {
-                        obj.open();
+                        obj.open(player);
                     }
                 }
             }

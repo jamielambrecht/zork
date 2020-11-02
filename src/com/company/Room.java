@@ -94,11 +94,14 @@ abstract class Room {
         private String destinationName = new String();
         private Room destination;
         private boolean locked;
+        private String requiredItem = new String();
         private boolean open = true;
         private String lockedMsg = new String();
         private String closedMsg = new String();
         private String openLockedMsg = new String();
         private String openMsg = new String();
+
+
         public Door(String string, String destinationName, boolean locked) {
             this.string = string;
             this.identifiers.add(this.string);
@@ -113,12 +116,22 @@ abstract class Room {
             }
             return destination;
         }
-        public void open() {
+        public void open(Player player) {
             if (!isOpen()) {
                 if (!isLocked()) {
                     System.out.println(openMsg);
                     this.setOpen(true);
                 } else {
+                    if (!this.requiredItem.isBlank()) {
+                        for (Item item : player.getInventory().getItems()) {
+                            for (String s : item.getIdentifiers()) {
+                                if (requiredItem.equals(s)) {
+                                    this.locked = false;
+                                    System.out.println("The door was unlocked!");
+                                }
+                            }
+                        }
+                    }
                     System.out.println(lockedMsg);
                 }
             }
@@ -131,6 +144,9 @@ abstract class Room {
         }
         public void setOpen(boolean open) {
             this.open = open;
+        }
+        public void setRequiredItem(String identifier) {
+            this.requiredItem = identifier;
         }
         public void setLockedMsg(String message) {
             this.lockedMsg = message;
@@ -174,7 +190,7 @@ abstract class Room {
             this.containedItem = containedItem;
             this.open = false;
         }
-        public void open() {
+        public void open(Player player) {
             if (!isOpen()) {
                 if (!isLocked()) {
                     System.out.println(getOpenMsg());
@@ -339,6 +355,23 @@ abstract class Room {
         public String lookString() { return "A battery-powered brass lantern is on the trophy case."; };
     }
 
+    class SkeletonKey extends Item {
+        public SkeletonKey() {
+            this.name = "key";
+            this.addIdentifier(this.name);
+        };
+        @Override
+        public void read() {
+            System.out.println(this.toString());
+        }
+        @Override
+        public String toString() {
+            return "Read a key?";
+        }
+        @Override
+        public String lookString() { return "The skeleton dropped a key after being defeated."; };
+    }
+
 
     public class Enemy {
         private String name;
@@ -367,6 +400,8 @@ abstract class Room {
             boolean quitFlag = battle.fight();
             if (this.isDead) {
                 setEnemy(null);
+                player.getLocation().items.add(new SkeletonKey());
+                player.getLocation().look();
             }
             return quitFlag;
         }
@@ -472,6 +507,13 @@ class Kitchen extends Room {
 
         this.doors.add(new Door("east", "East of House", false));
         this.doors.add(new Door("west", "Living Room", false));
+        this.doors.add(new Door("up", "Upstairs", true));
+        this.doors.get(2).addIdentifier("door");
+        this.doors.get(2).addIdentifier("upstairs");
+        this.doors.get(2).setOpen(false);
+        this.doors.get(2).setLockedMsg("You would probably need a key to open the door.");
+        this.doors.get(2).setClosedMsg("The door at the top of the stairs is closed and also locked.");
+        this.doors.get(2).setRequiredItem("key");
 
         this.items.add(new SackOfPeppersItem());
         this.items.get(0).addIdentifier("peppers");
@@ -498,6 +540,21 @@ class LivingRoom extends Room {
 
         this.items.add(new ElvishSword());
         this.items.add(new Lantern());
+
+    }
+}
+
+class Upstairs extends Room {
+
+    public Upstairs() {
+        this.name = "Upstairs";
+        this.description = "You have moved into a dark place\n"
+                + "It is pitch black.";
+
+        this.roomView.add(name);
+        this.roomView.add(description);
+
+        this.doors.add(new Door("down", "Kitchen", false));
 
     }
 }
