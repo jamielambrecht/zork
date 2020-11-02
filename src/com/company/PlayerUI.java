@@ -27,12 +27,11 @@ class PlayerUI {
         commandsList.add(new OpenCommand(player));
         commandsList.add(new InventoryCommand(player));
         commandsList.add(new TakeCommand(player));
-        commandsList.add(new GetCommand(player));
         commandsList.add(new ReadCommand(player));
         commandsList.add(new ExamineCommand(player));
         commandsList.add(new ThrowCommand(player));
         commandsList.add(new DropCommand(player));
-        commandsList.add(new AttackCommand(player));
+        commandsList.add(new FightCommand(player));
         commandsList.add(new DrinkCommand(player));
         commandsList.add(new QuitCommand(player));
 
@@ -75,6 +74,13 @@ class PlayerUI {
         for (String target : targetsList) {
             if (word.equals(target)) {
                 return target;
+            }
+        }
+        for (Room.Item item : player.getInventory().getItems()) {
+            for (String target : item.getIdentifiers()) {
+                if (word.equals(target)) {
+                    return target;
+                }
             }
         }
         return null;

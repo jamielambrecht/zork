@@ -1,19 +1,21 @@
 package com.company;
 
+import java.util.ArrayList;
+
 public class Player {
-    protected String name;
-    protected int hitPoints;
-    protected int damageDealt;
+    private int health;
+    private int damageDealt;
 	protected Room location;
 	protected World world;
+	protected Inventory playerInventory;
 
-
-    public Player(int hitPoints, int damageDealt, World world) {
-        this.hitPoints = hitPoints;
+    public Player(int health, int damageDealt, World world) {
+        this.health = health;
         this.damageDealt = damageDealt;
         this.world = world;
         this.location = world.getRooms().get(0);
         this.location.look();
+        this.playerInventory = new Inventory();
     }
 
 		/*
@@ -34,9 +36,41 @@ public class Player {
     }
     */
     // Room location = new Room();
+    public int getHealth() { return this.health; }
+    public int getDamageDealt() { return this.damageDealt; }
+
+    public void setHealth(int value) { this.health = value; }
+
     public Room getLocation() { return this.location; }
     public void setLocation(Room room) {
         this.location = room;
+    }
+
+    public Inventory getInventory() { return playerInventory; }
+
+    public class Inventory {
+        private ArrayList<Room.Item> items = new ArrayList<Room.Item>();
+        public Inventory() { }
+        public void addItemToInventory(Room.Item item) {
+            if (items.size() < 10) {
+                items.add(item);
+            } else {
+                System.out.println("You can't carry anymore items.");
+            }
+        }
+        public void display() {
+            if (!this.items.isEmpty()) {
+                System.out.println("You are carrying: \n");
+                for (Room.Item item : items) {
+                    System.out.println(item.getName());
+                }
+            } else {
+                System.out.println("You are empty-handed.");
+            }
+        }
+        public ArrayList<Room.Item> getItems() {
+            return items;
+        }
     }
 }
 

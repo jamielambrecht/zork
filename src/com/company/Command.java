@@ -24,13 +24,18 @@ class GoCommand extends Command {
     public GoCommand(Player player) { super(player); }
 
     public boolean execute(String target) {
+        if (target.isBlank() || target == null) {
+            System.out.println("Where to?");
+        }
         for (Room.Door door : player.getLocation().doors) {
-            if (target.equals(door.toString())) {
-                if (!door.isLocked()) {
-                    player.setLocation(door.enter(player.world));
-                    player.getLocation().look();
-                } else {
-                    System.out.println(door.getLockedMsg());
+            for (String s : door.getIdentifiers()) {
+                if (target.equals(s)) {
+                    if (door.isOpen()) {
+                        player.setLocation(door.enter(player.world));
+                        player.getLocation().look();
+                    } else {
+                        System.out.println(door.getClosedMsg());
+                    }
                 }
             }
         }
@@ -40,35 +45,61 @@ class GoCommand extends Command {
 }
 class OpenCommand extends Command {
     public OpenCommand(Player player) { super(player); }
+
     public boolean execute(String target) {
+        for (Room.Door door : player.getLocation().doors) {
+            for (String s : door.getIdentifiers()) {
+                if (target.equals(s)) {
+                    door.open();
+                }
+            }
+        }
+        for (Room.StaticObject obj : player.getLocation().staticObjects) {
+            for (String s : obj.getIdentifiers()) {
+                if (target.equals(s)) {
+                    obj.open();
+                }
+            }
+        }
         return false;
     };
+
+    public String toString() { return "open"; }
 }
 class InventoryCommand extends Command {
     public InventoryCommand(Player player) { super(player); }
     public boolean execute(String target) {
+        player.getInventory().display();
         return false;
     };
+
+    public String toString() { return "inventory"; }
 }
 class TakeCommand extends Command {
     public TakeCommand(Player player) { super(player); }
     public boolean execute(String target) {
+        player.playerInventory.addItemToInventory(player.getLocation().take(target));
         return false;
     };
 
-    public String toString() {return "take";};
-}
-class GetCommand extends Command {
-    public GetCommand(Player player) { super(player); }
-    public boolean execute(String target) {
-        return false;
-    };
+    public String toString() { return "take"; };
 }
 class ReadCommand extends Command {
     public ReadCommand(Player player) { super(player); }
     public boolean execute(String target) {
+        for (Room.Item item : player.getInventory().getItems()) {
+            for (String s : item.getIdentifiers()) {
+                if (target.equals(s)) {
+                    item.read();
+                }
+            }
+        }
         return false;
     };
+
+    public String toString() {
+        return "read";
+    }
 }
 class ExamineCommand extends Command {
     public ExamineCommand(Player player) { super(player); }
@@ -88,11 +119,19 @@ class DropCommand extends Command {
         return false;
     };
 }
-class AttackCommand extends Command {
-    public AttackCommand(Player player) { super(player); }
+class FightCommand extends Command {
+    public FightCommand(Player player) { super(player); }
     public boolean execute(String target) {
+        if (player.getLocation().getEnemy() != null) {
+            if (target.equals(player.getLocation().getEnemy().toString())) {
+                return player.getLocation().getEnemy().fight(player);
+            }
+        } else {
+            System.out.println("There's no enemy here.");
+        }
         return false;
     };
+    public String toString() { return "fight"; }
 }
 class DrinkCommand extends Command {
     public DrinkCommand(Player player) { super(player); }
