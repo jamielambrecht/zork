@@ -305,6 +305,41 @@ abstract class Room {
                 "A quantity of water"; };
     }
 
+    class ElvishSword extends Item {
+        public ElvishSword() {
+            this.name = "sword";
+            this.addIdentifier(this.name);
+        };
+        @Override
+        public void read() {
+            System.out.println(this.toString());
+        }
+        @Override
+        public String toString() {
+            return "Read a sword?";
+        }
+        @Override
+        public String lookString() { return "Above the trophy case hangs an elvish sword of great antiquity."; };
+    }
+
+    class Lantern extends Item {
+        public Lantern() {
+            this.name = "lantern";
+            this.addIdentifier(this.name);
+        };
+        @Override
+        public void read() {
+            System.out.println(this.toString());
+        }
+        @Override
+        public String toString() {
+            return "Read a lantern?";
+        }
+        @Override
+        public String lookString() { return "A battery-powered brass lantern is on the trophy case."; };
+    }
+
+
     public class Enemy {
         private String name;
         private int health;
@@ -436,12 +471,33 @@ class Kitchen extends Room {
         this.roomView.add(description);
 
         this.doors.add(new Door("east", "East of House", false));
+        this.doors.add(new Door("west", "Living Room", false));
 
         this.items.add(new SackOfPeppersItem());
         this.items.get(0).addIdentifier("peppers");
 
         this.items.add(new WaterBottleItem());
         this.items.get(1).addIdentifier("water");
+
+    }
+}
+
+class LivingRoom extends Room {
+
+    public LivingRoom() {
+        this.name = "Living Room";
+        this.description = "You are in the living room.\n"
+            + "There is a doorway to the east, a wooden door\n"
+            + "with strange gothic lettering to the west, which appears to be nailed shut,\n"
+            + "a trophy case, and a large oriental rug in the center of the room.";
+
+        this.roomView.add(name);
+        this.roomView.add(description);
+
+        this.doors.add(new Door("east", "Kitchen", false));
+
+        this.items.add(new ElvishSword());
+        this.items.add(new Lantern());
 
     }
 }

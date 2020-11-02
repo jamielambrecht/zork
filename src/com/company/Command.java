@@ -24,20 +24,24 @@ class GoCommand extends Command {
     public GoCommand(Player player) { super(player); }
 
     public boolean execute(String target) {
-        if (target.isBlank() || target == null) {
-            System.out.println("Where to?");
-        }
-        for (Room.Door door : player.getLocation().doors) {
-            for (String s : door.getIdentifiers()) {
-                if (target.equals(s)) {
-                    if (door.isOpen()) {
-                        player.setLocation(door.enter(player.world));
-                        player.getLocation().look();
-                    } else {
-                        System.out.println(door.getClosedMsg());
+        if (target != null) {
+            if (target.isBlank() || target == null) {
+                System.out.println("Where to?");
+            }
+            for (Room.Door door : player.getLocation().doors) {
+                for (String s : door.getIdentifiers()) {
+                    if (target.equals(s)) {
+                        if (door.isOpen()) {
+                            player.setLocation(door.enter(player.world));
+                            player.getLocation().look();
+                        } else {
+                            System.out.println(door.getClosedMsg());
+                        }
                     }
                 }
             }
+        } else {
+            System.out.println("I don't know where that is.");
         }
         return false;
     };
@@ -47,17 +51,19 @@ class OpenCommand extends Command {
     public OpenCommand(Player player) { super(player); }
 
     public boolean execute(String target) {
-        for (Room.Door door : player.getLocation().doors) {
-            for (String s : door.getIdentifiers()) {
-                if (target.equals(s)) {
-                    door.open();
+        if (target != null) {
+            for (Room.Door door : player.getLocation().doors) {
+                for (String s : door.getIdentifiers()) {
+                    if (target.equals(s)) {
+                        door.open();
+                    }
                 }
             }
-        }
-        for (Room.StaticObject obj : player.getLocation().staticObjects) {
-            for (String s : obj.getIdentifiers()) {
-                if (target.equals(s)) {
-                    obj.open();
+            for (Room.StaticObject obj : player.getLocation().staticObjects) {
+                for (String s : obj.getIdentifiers()) {
+                    if (target.equals(s)) {
+                        obj.open();
+                    }
                 }
             }
         }
@@ -123,9 +129,24 @@ class FightCommand extends Command {
     public FightCommand(Player player) { super(player); }
     public boolean execute(String target) {
         if (player.getLocation().getEnemy() != null) {
-            if (target.equals(player.getLocation().getEnemy().toString())) {
-                return player.getLocation().getEnemy().fight(player);
+            if (target != null) {
+                if (target.equals(player.getLocation().getEnemy().toString())) {
+                    boolean hasSword = false;
+                    for (Room.Item item : player.getInventory().getItems()) {
+                        if (item.getName() == "sword") {
+                            hasSword = true;
+                        }
+                    }
+                    if (hasSword == true) {
+                        return player.getLocation().getEnemy().fight(player);
+                    } else {
+                        System.out.println("How will you fight without a weapon?");
+                    }
+                }
+            } else {
+                System.out.println("Fight who?");
             }
+
         } else {
             System.out.println("There's no enemy here.");
         }
